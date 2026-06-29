@@ -117,7 +117,6 @@ PacketResponse send_bluetooth_and_receive(const RemoteDevice &device,
         sockaddr_l2 remote{};
         remote.l2_family = AF_BLUETOOTH;
         remote.l2_psm = htobs(kBluetoothPsm);
-        remote.l2_bdaddr_type = BDADDR_LE_PUBLIC;
         if (str2ba(device.macAddress.c_str(), &remote.l2_bdaddr) != 0) {
             throw std::runtime_error("Invalid Bluetooth MAC address");
         }
@@ -287,8 +286,6 @@ void run_bluetooth_server_loop() {
     sockaddr_l2 local{};
     local.l2_family = AF_BLUETOOTH;
     local.l2_psm = htobs(kBluetoothPsm);
-    str2ba("00:00:00:00:00:00", &local.l2_bdaddr);
-    local.l2_bdaddr_type = BDADDR_LE_PUBLIC;
 
     if (bind(serverFd, reinterpret_cast<sockaddr *>(&local), sizeof(local)) != 0) {
         close(serverFd);
